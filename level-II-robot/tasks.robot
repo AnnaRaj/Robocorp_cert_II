@@ -8,6 +8,7 @@ Documentation       Orders robots from RobotSpareBin Industries Inc.
 
 Library             RPA.Archive
 Library             RPA.Browser.Selenium    auto_close=${FALSE}
+Library             RPA.Dialogs
 Library             RPA.FileSystem
 Library             RPA.HTTP
 Library             RPA.PDF
@@ -40,6 +41,12 @@ Order robots from RobotSpareBin Industries Inc
 
 
 *** Keywords ***
+Ask URL for csv file
+    Add heading    Please enter url for order csv file
+    Add text input    url
+    ${result}=    Run dialog
+    RETURN    ${result.url}
+
 Cleanup temp directories
     Remove Directory    ${TEMP_PDF}    True
     Remove Directory    ${TEMP_PNG}    True
@@ -56,7 +63,8 @@ Open the robot order website
     Open Available Browser    https://robotsparebinindustries.com/#/robot-order
 
 Get orders
-    Download    https://robotsparebinindustries.com/orders.csv    overwrite=True
+    ${order_url}=    Ask URL for csv file
+    Download    ${order_url}    overwrite=True
     ${orders}=    Read table from CSV    orders.csv    header=True
     RETURN    ${orders}
 
