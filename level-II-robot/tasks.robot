@@ -12,6 +12,7 @@ Library             RPA.Dialogs
 Library             RPA.FileSystem
 Library             RPA.HTTP
 Library             RPA.PDF
+Library             RPA.Robocorp.Vault
 Library             RPA.Tables
 
 
@@ -37,12 +38,15 @@ Order robots from RobotSpareBin Industries Inc
     END
     Create ZIP from PDF receipts
     # Cleanup temp directories
+    # Cleanup doesn't work in control room, because "close pdf" keyword doesn't work in control room
     [Teardown]    Close Browser
 
 
 *** Keywords ***
 Ask URL for csv file
+    # The url to be entered: https://robotsparebinindustries.com/orders.csv
     Add heading    Please enter url for order csv file
+    Add text    Hint: it's https://robotsparebinindustries.com/orders.csv
     Add text input    url
     ${result}=    Run dialog
     RETURN    ${result.url}
@@ -60,7 +64,8 @@ Set up temp directories
     Create Directory    ${TEMP_PNG}
 
 Open the robot order website
-    Open Available Browser    https://robotsparebinindustries.com/#/robot-order
+    ${website_url}=    Get Secret    order_url
+    Open Available Browser    ${website_url}[url]
 
 Get orders
     ${order_url}=    Ask URL for csv file
@@ -78,7 +83,7 @@ Embed the robot screenshot to the receipt PDF file
     ...    ${pdf}
     ...    ${screenshot}
     Add Files To Pdf    ${files}    ${pdf}
-    # Close Pdf    ${pdf}
+    # Close Pdf    ${pdf}    # Doesn't work in control room, don't know why.
 
 Take a screenshot
     [Arguments]    ${order}
