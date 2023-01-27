@@ -36,7 +36,7 @@ Order robots from RobotSpareBin Industries Inc
         Go to order another robot
     END
     Create ZIP from PDF receipts
-    Cleanup temp directories
+    # Cleanup temp directories
     [Teardown]    Close Browser
 
 
@@ -78,7 +78,7 @@ Embed the robot screenshot to the receipt PDF file
     ...    ${pdf}
     ...    ${screenshot}
     Add Files To Pdf    ${files}    ${pdf}
-    Close Pdf    ${pdf}
+    # Close Pdf    ${pdf}
 
 Take a screenshot
     [Arguments]    ${order}

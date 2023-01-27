@@ -15,3 +15,7 @@ temp/
 testrun/*
 .~lock*
 *.pkl
+
+# robot temp files:
+temp_pdf/
+temp_png/
